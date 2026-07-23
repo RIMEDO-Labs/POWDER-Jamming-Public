@@ -4,18 +4,18 @@ UPDATE_ATTENS_SCRIPT=/local/repository/bin/update-attens
 
 UE=$1
 RU=$2
-
-HIGH=60
+PERIOD_SEC=${3:-0.3}
 LOW=0
-PERIOD_MS=300
 
 usage() {
     echo "Usage:"
-    echo "  toggle-atten <ue1|ue2> <ru1|ru2>"
+    echo "  toggle-atten <ue1|ue2> <ru1|ru2> [period_in_seconds]"
+    echo "Example:"
+    echo "  toggle-atten ue1 ru1 0.5   # change every 500 ms"
     exit 1
 }
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
     usage
 fi
 
@@ -27,13 +27,13 @@ case "${RU}${UE}" in
     *) echo "Invalid UE or RU"; exit 1 ;;
 esac
 
-echo "Toggling $GROUP between ${LOW} dB and ${HIGH} dB every ${PERIOD_MS} ms"
+echo "Toggling $GROUP between ${LOW} dB and ${HIGH} dB every ${PERIOD_SEC} s"
 echo "Press Ctrl+C to stop."
 
 while true; do
     $UPDATE_ATTENS_SCRIPT "$GROUP" $LOW
-    sleep 0.1
+    sleep "$PERIOD_SEC"
 
     $UPDATE_ATTENS_SCRIPT "$GROUP" $HIGH
-    sleep 0.1
+    sleep "$PERIOD_SEC"
 done
