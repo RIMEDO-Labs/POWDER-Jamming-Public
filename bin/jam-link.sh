@@ -6,6 +6,7 @@ UE=$1
 RU=$2
 PERIOD_SEC=${3:-0.3}
 LOW=0
+HIGH=60
 
 usage() {
     echo "Usage:"
