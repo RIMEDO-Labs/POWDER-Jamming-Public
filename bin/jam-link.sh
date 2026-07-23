@@ -7,7 +7,7 @@ RU=$2
 
 HIGH=60
 LOW=0
-PERIOD_MS=100
+PERIOD_MS=300
 
 usage() {
     echo "Usage:"
