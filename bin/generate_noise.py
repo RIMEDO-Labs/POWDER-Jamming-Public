@@ -6,12 +6,12 @@ import numpy as np
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate complex Gaussian noise IQ samples."
+        description="Generate complex Gaussian noise IQ samples in sc16 format."
     )
 
     parser.add_argument(
         "--output",
-        default="noise.fc32",
+        default="noise.sc16",
         help="Output IQ file"
     )
 
@@ -25,7 +25,7 @@ def main():
     parser.add_argument(
         "--duration",
         type=float,
-        default=10.0,
+        default=0.1,
         help="Duration of generated signal [s]"
     )
 
@@ -42,20 +42,35 @@ def main():
 
     print("Generating noise:")
     print(f"  sample rate : {args.sample_rate / 1e6:.2f} MS/s")
-    print(f"  duration    : {args.duration:.2f} s")
+    print(f"  duration    : {args.duration:.3f} s")
     print(f"  samples     : {n_samples}")
     print(f"  output      : {args.output}")
 
     rng = np.random.default_rng(args.seed)
 
+    # Complex Gaussian noise
     noise = (
         rng.standard_normal(n_samples)
         + 1j * rng.standard_normal(n_samples)
     ) / np.sqrt(2)
 
-    noise = noise.astype(np.complex64)
+    # Normalize to avoid clipping
+    peak = np.max(np.abs(noise))
+    noise = noise / peak
 
-    noise.tofile(args.output)
+    # Convert to signed 16-bit IQ
+    scale = 32767
+
+    i = np.real(noise * scale).astype(np.int16)
+    q = np.imag(noise * scale).astype(np.int16)
+
+    # Interleaved I/Q:
+    # I0, Q0, I1, Q1, ...
+    iq = np.empty(2 * n_samples, dtype=np.int16)
+    iq[0::2] = i
+    iq[1::2] = q
+
+    iq.tofile(args.output)
 
     print("Done.")
 
