@@ -8,7 +8,9 @@ RU2UE1_PATHS=(19 20 51 52)
 RU1UE2_PATHS=(81 82 113 114)
 RU2UE2_PATHS=(83 84 115 116)
 UEMON_PATHS=(21 22 23 24 53 54 55 56 85 86 87 88 117 118 119 120)
-ALL_PATHS=( ${RU1UE1_PATHS[@]} ${RU2UE1_PATHS[@]} ${RU1UE2_PATHS[@]} ${RU2UE2_PATHS[@]} ${UEMON_PATHS[@]} )
+N300UE1_PATHS=(21 22 23 24 53 54 55 56)
+N300UE2_PATHS=(85 86 87 88 117 118 119 120)
+ALL_PATHS=( ${RU1UE1_PATHS[@]} ${RU2UE1_PATHS[@]} ${RU1UE2_PATHS[@]} ${RU2UE2_PATHS[@]} ${UEMON_PATHS[@]} ${N300UE1_PATHS[@]} ${N300UE2_PATHS[@]} )
 
 usage() {
     cat <<EOF
@@ -22,6 +24,8 @@ usage:
             ru2ue1: paths from RU2 to UE1
             ru1ue2: paths from RU1 to UE2
             ru2ue2: paths from RU2 to UE2
+            n300ue1: paths from N300 to UE1
+            n300ue2: paths from N300 to UE2
             uemon: paths from UE1 and UE2 to UE monitor
             all: all paths
         <attenval> and be in integer in [0..95]
@@ -73,6 +77,13 @@ case $RU in
     uemon)
         set_paths ${UEMON_PATHS[@]}
         ;;
+    n300ue1)
+    set_paths ${N300UE1_PATHS[@]}
+    ;;
+
+    n300ue2)
+    set_paths ${N300UE2_PATHS[@]}
+    ;;    
     all)
         set_paths ${ALL_PATHS[@]}
         ;;
