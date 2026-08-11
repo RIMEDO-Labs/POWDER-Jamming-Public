@@ -5,24 +5,26 @@ UPDATE_ATTENS_SCRIPT=/local/repository/bin/update-attens
 UE=$1
 RU=$2
 
-TOGGLE_PERIOD=${3:-1}      # zmiana co ile sekund
-EPISODES=${4:-3}           # liczba epizodów
-EPISODE_DURATION=${5:-20}  # długość jednego epizodu [s]
-BREAK_DURATION=${6:-10}    # przerwa między epizodami [s]
+TOGGLE_PERIOD=${3:-1}       # zmiana co ile sekund
+EPISODES=${4:-3}            # liczba epizodów
+EPISODE_DURATION=${5:-20}   # długość jednego epizodu [s]
+BREAK_DURATION=${6:-10}     # przerwa między epizodami [s]
+MAX_ATTEN=${7:-60}           # maksymalne tłumienie [dB]
 
 LOW=0
-HIGH=60
+HIGH=$MAX_ATTEN
 
 usage() {
     echo "Usage:"
-    echo "  toggle-atten <ue1|ue2> <ru1|ru2> [toggle_period] [episodes] [episode_duration] [break_duration]"
+    echo "  toggle-atten <ue1|ue2> <ru1|ru2> [toggle_period] [episodes] [episode_duration] [break_duration] [max_atten]"
     echo
     echo "Example:"
-    echo "  toggle-atten ue1 ru1 1 3 20 10"
+    echo "  toggle-atten ue1 ru1 1 3 20 10 40"
     echo "    -> 3 epizody,"
     echo "       każdy trwa 20 s,"
     echo "       przełączanie co 1 s,"
-    echo "       10 s przerwy między epizodami."
+    echo "       10 s przerwy między epizodami,"
+    echo "       maksymalne tłumienie 40 dB."
     exit 1
 }
 
@@ -53,6 +55,7 @@ echo "Episodes          : $EPISODES"
 echo "Episode duration  : ${EPISODE_DURATION}s"
 echo "Toggle period     : ${TOGGLE_PERIOD}s"
 echo "Break duration    : ${BREAK_DURATION}s"
+echo "Max attenuation   : ${MAX_ATTEN} dB"
 echo "==========================================="
 
 for ((ep=1; ep<=EPISODES; ep++)); do
@@ -78,7 +81,6 @@ for ((ep=1; ep<=EPISODES; ep++)); do
         elapsed=$(echo "$elapsed + $TOGGLE_PERIOD" | bc)
     done
 
-    # po epizodzie zawsze wracamy do 0 dB
     $UPDATE_ATTENS_SCRIPT "$GROUP" $LOW
 
     if [ "$ep" -lt "$EPISODES" ]; then
