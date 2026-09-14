@@ -10,20 +10,20 @@ if [ -f $SRCDIR/ocudu-setup-complete ]; then
 fi
 
 # use latest UHD from Ettus PPA; 4.10.0 as of 06/2026.
-# sudo add-apt-repository -y ppa:ettusresearch/uhd
-# sudo apt-get update
-# sudo apt-get install -y libuhd-dev uhd-host
+sudo add-apt-repository -y ppa:ettusresearch/uhd
+sudo apt-get update
+sudo apt-get install -y libuhd-dev uhd-host
 
 
 # Disable use latest UHD from Ettus PPA; 4.10.0 as of 06/2026.
-sudo add-apt-repository -y ppa:ettusresearch/uhd
-sudo apt-get update
-sudo apt-get install -y --allow-downgrades \
-  libuhd-dev=4.10* \
-  uhd-host=4.10* \
-  libuhd4.10.0=4.10*
+# sudo add-apt-repository -y ppa:ettusresearch/uhd
+# sudo apt-get update
+# sudo apt-get install -y --allow-downgrades \
+#   libuhd-dev=4.10* \
+#   uhd-host=4.10* \
+#   libuhd4.10.0=4.10*
 
-sudo apt-mark hold libuhd-dev uhd-host libuhd4.10.0
+# sudo apt-mark hold libuhd-dev uhd-host libuhd4.10.0
 
 
 sudo apt-get install -y \
