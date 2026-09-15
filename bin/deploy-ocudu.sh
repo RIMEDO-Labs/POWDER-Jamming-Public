@@ -2,6 +2,7 @@ set -ex
 COMMIT_HASH=$1
 BINDIR=`dirname $0`
 ETCDIR=/local/repository/etc
+DEBDIR=/local/repository/debs
 source $BINDIR/common.sh
 
 if [ -f $SRCDIR/ocudu-setup-complete ]; then
@@ -9,30 +10,9 @@ if [ -f $SRCDIR/ocudu-setup-complete ]; then
   exit 0
 fi
 
-# use latest UHD from Ettus PPA; 4.10.0 as of 06/2026.
-sudo add-apt-repository -y ppa:ettusresearch/uhd
+# install UHD 4.10 debs vendored in the repo (Ettus PPA moved on to 4.11)
 sudo apt-get update
-sudo apt-get install -y libuhd-dev uhd-host
-
-
-
-# UHD_VERSION="4.10.0.0"
-
-# echo "Installing UHD ${UHD_VERSION}"
-
-# sudo add-apt-repository -y ppa:ettusresearch/uhd
-# sudo apt-get update
-
-# Do NOT install "latest" UHD from the PPA.
-# The X310 in this experiment uses an older FPGA/RFNoC image,
-# therefore UHD must remain pinned to 4.10.0.0.
-
-sudo apt-get install -y \
-    libuhd4.10.0 \
-    uhd-rfnoc-dev
-
-# sudo apt-mark hold libuhd-dev uhd-host libuhd4.10.0
-
+sudo apt-get install -y --no-install-recommends $DEBDIR/*.deb
 
 sudo apt-get install -y \
   cmake \

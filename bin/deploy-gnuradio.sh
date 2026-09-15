@@ -2,12 +2,13 @@ set -ex
 COMMIT_HASH=$1
 BINDIR=`dirname $0`
 ETCDIR=/local/repository/etc
+DEBDIR=/local/repository/debs
 source $BINDIR/common.sh
 
 echo "installing deps"
-sudo add-apt-repository -y ppa:ettusresearch/uhd
+# install UHD 4.10 debs vendored in the repo (Ettus PPA moved on to 4.11)
 sudo apt update
-sudo apt install -y --no-install-recommends libuhd-dev uhd-host
+sudo apt install -y --no-install-recommends $DEBDIR/*.deb
 
 sudo apt install -y \
   cmake \
