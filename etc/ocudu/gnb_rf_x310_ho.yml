@@ -58,6 +58,12 @@ cell_cfg:
   nof_antennas_ul: 1
   plmn: "99999"
   tac: 1
+  pdsch:
+    min_ue_mcs: 0
+    max_ue_mcs: 28
+  pusch:
+    min_ue_mcs: 0
+    max_ue_mcs: 28
 
 cells:
   -
